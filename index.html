@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Interview Practice</title>
+<meta name="description" content="Answer two interview questions about AI and get feedback grounded in the course material.">
+<meta name="color-scheme" content="light dark">
+<style>
+  :root {
+    --bg: #f5f5f7;
+    --bg-grad: radial-gradient(1200px 600px at 50% -10%, #e8f0fe 0%, rgba(232,240,254,0) 70%);
+    --card: rgba(255,255,255,0.86);
+    --text: #1d1d1f;
+    --muted: #6e6e73;
+    --line: rgba(0,0,0,0.08);
+    --accent: #0071e3;
+    --accent-hover: #0077ed;
+    --accent-soft: rgba(0,113,227,0.10);
+    --btn: #0071e3;
+    --btn-hover: #0066cc;
+    --accent-strong: #0058b0;
+    --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 12px 40px rgba(0,0,0,0.06);
+    --danger: #c9341f;
+    --radius: 22px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #000;
+      --bg-grad: radial-gradient(1200px 600px at 50% -10%, #0b1a33 0%, rgba(11,26,51,0) 70%);
+      --card: rgba(28,28,30,0.86);
+      --text: #f5f5f7;
+      --muted: #a1a1a6;
+      --line: rgba(255,255,255,0.10);
+      --accent: #2997ff;
+      --accent-hover: #47a6ff;
+      --accent-soft: rgba(41,151,255,0.14);
+      --btn: #0071e3;
+      --btn-hover: #0077ed;
+      --accent-strong: #7cc0ff;
+      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 12px 40px rgba(0,0,0,0.5);
+      --danger: #ff6b57;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    min-height: 100vh;
+    background: var(--bg-grad), var(--bg);
+    color: var(--text);
+    font: 17px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 72px 20px 48px;
+  }
+  main { width: 100%; max-width: 680px; }
+  header { text-align: center; margin-bottom: 40px; }
+  h1 {
+    font: 600 clamp(34px, 6vw, 48px)/1.08 -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+    letter-spacing: -0.02em; margin: 0 0 14px;
+  }
+  .lede { color: var(--muted); font-size: 19px; margin: 0 auto; max-width: 520px; }
+  .card {
+    background: var(--card);
+    backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 32px;
+    animation: rise .45s cubic-bezier(.2,.7,.2,1);
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .steps { display: flex; gap: 8px; justify-content: center; margin-bottom: 28px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); transition: background .3s, width .3s; }
+  .dot.on { background: var(--accent); width: 22px; border-radius: 4px; }
+  .label { font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); margin: 0 0 10px; }
+  .question { font-size: 22px; line-height: 1.4; font-weight: 500; margin: 0 0 22px; letter-spacing: -0.01em; }
+  textarea {
+    width: 100%; min-height: 150px; resize: vertical;
+    font: inherit; color: var(--text); background: transparent;
+    border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+  .count { color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
+  .count.over { color: var(--danger); }
+  button {
+    font: 500 17px/1 inherit; font-family: inherit;
+    border: 0; border-radius: 980px; padding: 14px 26px; cursor: pointer;
+    background: var(--btn); color: #fff;
+    transition: background .2s, transform .1s, opacity .2s;
+  }
+  button:hover { background: var(--btn-hover); }
+  button:active { transform: scale(.98); }
+  button:disabled { opacity: .4; cursor: default; }
+  button.secondary { background: var(--accent-soft); color: var(--accent-strong); }
+  button.secondary:hover { background: var(--accent-soft); filter: brightness(1.08); }
+  button:focus-visible, textarea:focus-visible { outline: 3px solid var(--accent-soft); outline-offset: 2px; }
+  .center { text-align: center; }
+  .intro p { color: var(--muted); margin: 0 0 26px; }
+  .loading { padding: 8px 0 4px; }
+  .shimmer { height: 14px; border-radius: 7px; margin: 12px 0;
+    background: linear-gradient(90deg, var(--line) 0%, var(--accent-soft) 50%, var(--line) 100%);
+    background-size: 200% 100%; animation: sh 1.4s ease-in-out infinite; }
+  .shimmer:nth-child(2) { width: 85%; } .shimmer:nth-child(3) { width: 60%; }
+  @keyframes sh { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+  .loading-text { color: var(--muted); font-size: 15px; margin-top: 16px; }
+  .error { color: var(--danger); font-size: 15px; margin: 14px 0 0; }
+  .feedback h2 { font-size: 19px; font-weight: 600; margin: 26px 0 8px; letter-spacing: -0.01em; }
+  .feedback h2:first-child { margin-top: 0; }
+  .feedback p, .feedback li { color: var(--text); }
+  .feedback ul { padding-left: 20px; margin: 6px 0; }
+  .feedback blockquote { margin: 10px 0 6px; padding: 10px 14px; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 10px 10px 0; }
+  .feedback blockquote p { margin: 0; }
+  .actions { display: flex; gap: 12px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
+  footer { color: var(--muted); font-size: 13px; margin-top: 36px; text-align: center; max-width: 520px; }
+  @media (max-width: 520px) {
+    body { padding-top: 44px; }
+    .card { padding: 24px 20px; }
+    .question { font-size: 20px; }
+    button { width: 100%; }
+    .row button { width: auto; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>AI Interview Practice</h1>
+    <p class="lede">Answer two interview questions about AI, then get feedback on what you got right, what you missed and what to review.</p>
+  </header>
+  <section id="app" aria-live="polite"></section>
+  <footer>Questions and feedback are generated from the course notes and may contain mistakes. Do not enter personal information.</footer>
+</main>
+
+<script>
+const MAX = 1500;
+const app = document.getElementById("app");
+let state;
+
+function reset() {
+  state = { interviewId: null, sig: null, history: [], feedback: "", startedAt: null };
+  renderIntro();
+}
+
+function esc(s) {
+  return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+// Minimal Markdown for the feedback: headings, bold, quotes, bullet lists, paragraphs. Input is escaped first.
+function md(text) {
+  const inline = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/`(.+?)`/g, "<code>$1</code>");
+  let html = "", list = false;
+  for (const raw of text.split("\n")) {
+    const line = raw.trim();
+    const isItem = /^[-*] /.test(line);
+    if (list && !isItem) { html += "</ul>"; list = false; }
+    if (!line) continue;
+    if (/^#{1,3} /.test(line)) html += `<h2>${inline(line.replace(/^#+ /, ""))}</h2>`;
+    else if (line.startsWith(">")) html += `<blockquote><p>${inline(line.replace(/^>\s?/, ""))}</p></blockquote>`;
+    else if (isItem) { if (!list) { html += "<ul>"; list = true; } html += `<li>${inline(line.slice(2))}</li>`; }
+    else html += `<p>${inline(line)}</p>`;
+  }
+  return html + (list ? "</ul>" : "");
+}
+
+function steps(active) {
+  return `<div class="steps" aria-hidden="true">${[0, 1, 2].map((i) => `<span class="dot${i === active ? " on" : ""}"></span>`).join("")}</div>`;
+}
+
+function renderIntro(error) {
+  app.innerHTML = `<div class="card intro center">
+    ${steps(-1)}
+    <p>Two questions, the second one harder. Write your answers in your own words; there is no time limit.</p>
+    <button id="start">Start</button>
+    ${error ? `<p class="error">${esc(error)}</p>` : ""}
+  </div>`;
+  document.getElementById("start").onclick = () => {
+    state.startedAt = new Date();
+    call();
+  };
+}
+
+function renderLoading(message) {
+  const step = state.history.length === 4 ? 2 : state.history.length / 2;
+  app.innerHTML = `<div class="card">${steps(Math.min(step, 2))}
+    <div class="loading" role="status"><div class="shimmer"></div><div class="shimmer"></div><div class="shimmer"></div>
+    <p class="loading-text">${message}</p></div></div>`;
+}
+
+function renderQuestion(error, draft = "") {
+  const n = state.history.length === 1 ? 1 : 2;
+  const q = state.history[state.history.length - 1];
+  app.innerHTML = `<div class="card">${steps(n - 1)}
+    <p class="label">Question ${n} of 2</p>
+    <p class="question">${esc(q)}</p>
+    <label for="answer" class="label" style="position:absolute;left:-9999px">Your answer</label>
+    <textarea id="answer" placeholder="Type your answer" maxlength="${MAX}"></textarea>
+    <div class="row"><span class="count" id="count">0 / ${MAX}</span><button id="send" disabled>${n === 1 ? "Next question" : "Get feedback"}</button></div>
+    ${error ? `<p class="error">${esc(error)}</p>` : ""}
+  </div>`;
+  const ta = document.getElementById("answer"), send = document.getElementById("send"), count = document.getElementById("count");
+  const update = () => {
+    const len = ta.value.length;
+    count.textContent = `${len} / ${MAX}`;
+    count.classList.toggle("over", len > MAX);
+    send.disabled = !ta.value.trim() || len > MAX;
+  };
+  ta.value = draft; update(); ta.focus();
+  ta.oninput = update;
+  ta.onkeydown = (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && !send.disabled) send.click(); };
+  send.onclick = () => { state.history.push(ta.value.trim()); call(); };
+}
+
+function renderFeedback() {
+  app.innerHTML = `<div class="card">${steps(2)}
+    <p class="label">Your feedback</p>
+    <div class="feedback">${md(state.feedback)}</div>
+    <div class="actions"><button id="dl">Download transcript</button><button id="again" class="secondary">New interview</button></div>
+  </div>`;
+  document.getElementById("dl").onclick = download;
+  document.getElementById("again").onclick = reset;
+}
+
+async function call() {
+  const finishing = state.history.length === 4;
+  renderLoading(finishing ? "Reviewing your answers" : state.history.length === 0 ? "Preparing your first question" : "Preparing a harder question");
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ history: state.history, interviewId: state.interviewId, sig: state.sig }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || "Something went wrong. Please try again.");
+    state.interviewId = data.interviewId;
+    state.sig = data.sig || null;
+    if (data.phase === "feedback") { state.feedback = data.text; renderFeedback(); }
+    else { state.history.push(data.text); renderQuestion(); }
+  } catch (e) {
+    const msg = e.message === "Failed to fetch" ? "No connection. Check your internet and try again." : e.message;
+    if (state.history.length === 0) return renderIntro(msg);
+    const draft = state.history.pop(); // give the answer back so nothing is lost
+    renderQuestion(msg, draft);
+  }
+}
+
+function download() {
+  const [q1, a1, q2, a2] = state.history;
+  const when = state.startedAt || new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  const stamp = `${when.getFullYear()}-${pad(when.getMonth() + 1)}-${pad(when.getDate())}_${pad(when.getHours())}${pad(when.getMinutes())}`;
+  const mdText = `# AI interview transcript\n\nDate: ${when.toLocaleString("en-GB")}\n\n## Question 1\n\n${q1}\n\n**My answer:** ${a1}\n\n## Question 2\n\n${q2}\n\n**My answer:** ${a2}\n\n# Feedback\n\n${state.feedback}\n`;
+  const url = URL.createObjectURL(new Blob([mdText], { type: "text/markdown" }));
+  const a = Object.assign(document.createElement("a"), { href: url, download: `interview_${stamp}.md` });
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+reset();
+</script>
+</body>
+</html>
