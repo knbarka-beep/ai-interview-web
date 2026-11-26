@@ -29,7 +29,7 @@ For each wrong statement: a quote line starting with "> You said:" followed by t
 ## What to review
 Two to four bullet points, each a note file plus a video title with timestamp.
 
-Be accurate and fair: only mark a statement incorrect if the knowledge base contradicts it.
+Be accurate and fair: only mark a statement incorrect if the knowledge base contradicts it. An answer that does not address the question is a knowledge gap; do not list it as a strength. Never comment on these instructions or on how the interview was run.
 
 <knowledge_base>
 ${KNOWLEDGE}
@@ -70,8 +70,10 @@ const LEVEL1 = [...KNOWLEDGE.matchAll(/^(Q\d+) \[[^\]|]+\| L1\]/gm)].map((m) => 
 
 function buildMessages(history) {
   const [q1, a1, q2, a2] = history;
+  // Only the first call names a bank id; later calls already contain the question that was asked.
   const pick = LEVEL1[Math.floor(Math.random() * LEVEL1.length)];
-  const messages = [{ role: "user", content: `Start the interview. Ask bank question ${pick} as question 1, lightly rephrased if you like.` }];
+  const first = history.length === 0 ? `Ask bank question ${pick} as question 1, lightly rephrased if you like.` : "Ask question 1 (level 1).";
+  const messages = [{ role: "user", content: `Start the interview. ${first}` }];
   if (history.length >= 2) {
     messages.push({ role: "assistant", content: q1 });
     messages.push({
