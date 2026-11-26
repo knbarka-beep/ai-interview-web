@@ -141,7 +141,7 @@ export default async function handler(req, res) {
       .filter((b) => b.type === "text")
       .map((b) => b.text)
       .join("")
-      .replace(/\s*[–—]\s*/g, ", ") // house style: no en or em dashes
+      .replace(/\s*[\u2013\u2014]\s*/g, ", ") // house style: no en or em dashes
       .trim();
     const phase = history.length === 4 ? "feedback" : "question";
     if (phase === "question") {
