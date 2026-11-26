@@ -4,7 +4,7 @@ A two-question mock interview about AI. Press Start, answer a basic question, an
 
 - `index.html`: the whole front end (vanilla JS, no framework).
 - `api/chat.js`: Vercel serverless function that calls Anthropic (claude-haiku-5-5). The API key stays on the server.
-- `api/knowledge.js`: the knowledge base sent as a cached system prompt (about 18k tokens), generated from the project version's notes and question bank by `scripts/build-knowledge.mjs`.
+- `lib/knowledge.js`: the knowledge base sent as a cached system prompt (about 18k tokens), generated from the project version's notes and question bank by `scripts/build-knowledge.mjs`.
 - `tests/run-local.mjs`: local test that calls the function directly.
 
 ## Limits (the key is shared, so the server enforces them)

@@ -2,7 +2,7 @@
 // Flow (stateless, signed): history [] -> question 1; [q1, a1] -> question 2; [q1, a1, q2, a2] -> feedback.
 import Anthropic from "@anthropic-ai/sdk";
 import { createHash, createHmac, randomUUID, timingSafeEqual } from "node:crypto";
-import { KNOWLEDGE } from "./knowledge.js";
+import { KNOWLEDGE } from "../lib/knowledge.js";
 
 const MODEL = "claude-haiku-5-5";
 const MAX_TOKENS = 700;
